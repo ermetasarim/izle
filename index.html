@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Izleme Listesi | Pars Studio</title>
+<title>İzleme Listesi | Pars Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#070b12;--p:#10182a;--line:rgba(255,255,255,.08);--t:#e8eef8;--m:#8b9bb4;--a:#f5c15d;--b:#5aa7ff}
@@ -17,25 +17,27 @@ h1{margin:0;font-size:20px}.sub{color:var(--m);font-size:12px}
 .card{background:linear-gradient(180deg,#121b2e,#0e1626);border:1px solid var(--line);border-radius:16px;padding:14px}
 .tag{font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(90,167,255,.12);color:var(--b)}
 .stars{color:var(--a);letter-spacing:2px}
+footer{margin-top:24px;text-align:center;color:var(--m);font-size:12px}
 @media(max-width:700px){.form{grid-template-columns:1fr}}
 </style></head>
 <body>
 <div class="wrap">
-  <header><div><h1>IZLEME LISTESI</h1><div class="sub">Film / dizi rafi</div></div>
-  <a class="btn" href="https://ermetasarim.github.io/projeler/">Portfoy</a></header>
+  <header><div><h1>İZLEME LİSTESİ</h1><div class="sub">Film / dizi rafı · Pars Studio</div></div>
+  <a class="btn" href="https://ermetasarim.github.io/projeler/">Portföy</a></header>
   <div class="form">
-    <input id="ad" placeholder="Film veya dizi adi">
+    <input id="ad" placeholder="Film veya dizi adı">
     <select id="tur"><option>Film</option><option>Dizi</option></select>
-    <select id="durum"><option value="sirada">Sirada</option><option value="izliyorum">Izliyorum</option><option value="bitti">Bitti</option></select>
+    <select id="durum"><option value="sirada">Sırada</option><option value="izliyorum">İzliyorum</option><option value="bitti">Bitti</option></select>
     <button class="btn pri" onclick="ekle()">Ekle</button>
   </div>
   <div class="tabs">
     <button class="btn" onclick="filtre('hepsi',this)">Hepsi</button>
-    <button class="btn" onclick="filtre('sirada',this)">Sirada</button>
-    <button class="btn" onclick="filtre('izliyorum',this)">Izliyorum</button>
+    <button class="btn" onclick="filtre('sirada',this)">Sırada</button>
+    <button class="btn" onclick="filtre('izliyorum',this)">İzliyorum</button>
     <button class="btn" onclick="filtre('bitti',this)">Bitti</button>
   </div>
   <div class="grid" id="box"></div>
+  <footer>Liste bu tarayıcıda saklanır · Pars Studio</footer>
 </div>
 <script>
 const KEY="pars_izle_v1";
@@ -46,12 +48,12 @@ let items=JSON.parse(localStorage.getItem(KEY)||"null")||[
 ];
 const save=()=>localStorage.setItem(KEY,JSON.stringify(items));
 let f="hepsi";
-const lab={sirada:"Sirada",izliyorum:"Izliyorum",bitti:"Bitti"};
+const lab={sirada:"Sırada",izliyorum:"İzliyorum",bitti:"Bitti"};
 function ekle(){const ad=document.getElementById("ad").value.trim(); if(!ad) return; items.unshift({id:Date.now().toString(36),ad,tur:document.getElementById("tur").value,durum:document.getElementById("durum").value,puan:0}); document.getElementById("ad").value=""; save(); ciz();}
 function puan(id,n){const x=items.find(i=>i.id===id); if(x){x.puan=n;save();ciz()}}
 function setD(id,d){const x=items.find(i=>i.id===id); if(x){x.durum=d;save();ciz()}}
 function sil(id){items=items.filter(i=>i.id!==id);save();ciz()}
 function filtre(v,el){f=v;document.querySelectorAll(".tabs .btn").forEach(b=>b.style.background=""); el.style.background="rgba(90,167,255,.2)";ciz()}
-function ciz(){const L=items.filter(i=>f==="hepsi"||i.durum===f); box.innerHTML=L.map(i=>`<div class="card"><div style="display:flex;justify-content:space-between"><b>${i.ad}</b><span class="tag">${i.tur}</span></div><p class="sub">${lab[i.durum]}</p><div class="stars">${[1,2,3,4,5].map(n=>`<span onclick="puan('${i.id}',${n})" style="cursor:pointer">${n<=i.puan?"*":"o"}</span>`).join("")}</div><div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn" onclick="setD('${i.id}','sirada')">Sirada</button><button class="btn" onclick="setD('${i.id}','izliyorum')">Izle</button><button class="btn" onclick="setD('${i.id}','bitti')">Bitti</button><button class="btn" onclick="sil('${i.id}')">Sil</button></div></div>`).join("")||"<p class='sub'>Liste bos.</p>";}
+function ciz(){const L=items.filter(i=>f==="hepsi"||i.durum===f); box.innerHTML=L.map(i=>`<div class="card"><div style="display:flex;justify-content:space-between"><b>${i.ad}</b><span class="tag">${i.tur}</span></div><p class="sub">${lab[i.durum]}</p><div class="stars">${[1,2,3,4,5].map(n=>`<span onclick="puan('${i.id}',${n})" style="cursor:pointer">${n<=i.puan?"★":"☆"}</span>`).join("")}</div><div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn" onclick="setD('${i.id}','sirada')">Sırada</button><button class="btn" onclick="setD('${i.id}','izliyorum')">İzle</button><button class="btn" onclick="setD('${i.id}','bitti')">Bitti</button><button class="btn" onclick="sil('${i.id}')">Sil</button></div></div>`).join("")||"<p class='sub'>Liste boş.</p>";}
 ciz();
 </script></body></html>
