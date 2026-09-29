@@ -1,2 +1,2 @@
-# izle
-Film ve dizi izleme listesi
+# Izleme Listesi
+https://ermetasarim.github.io/izle/
